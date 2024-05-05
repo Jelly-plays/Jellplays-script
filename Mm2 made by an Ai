@@ -1,0 +1,113 @@
+-- Create a ScreenGui to hold the GUI elements
+local gui = Instance.new("ScreenGui")
+gui.ResetOnSpawn = false -- GUI will not disappear when resetting
+gui.Parent = game.Players.LocalPlayer.PlayerGui -- Parent to PlayerGui to ensure it appears
+
+-- Create a Frame to hold the title and buttons
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 400, 0, 250)
+frame.Position = UDim2.new(0.5, -200, 0.5, -125)
+frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+frame.BorderSizePixel = 0
+frame.BackgroundTransparency = 1 -- Set initial transparency to 0
+frame.Parent = gui
+
+-- Create a TextLabel for the title
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 0.2, 0)
+title.Position = UDim2.new(0, 0, 0, 0)
+title.Text = "Jellplays GUI"
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.BackgroundTransparency = 1
+title.TextSize = 30
+title.Parent = frame
+
+-- Create a TextButton as the "mm2 R3TH PRIV" button
+local button1 = Instance.new("TextButton")
+button1.Size = UDim2.new(0.8, 0, 0.15, 0)
+button1.Position = UDim2.new(0.1, 0, 0.15, 0)
+button1.Text = "mm2 R3TH PRIV"
+button1.TextColor3 = Color3.fromRGB(255, 255, 255)
+button1.BackgroundColor3 = Color3.fromRGB(74, 153, 211)
+button1.BorderSizePixel = 0
+button1.TextSize = 20
+button1.Parent = frame
+
+-- Create a TextButton as the "Infinite Jump" button
+local button2 = Instance.new("TextButton")
+button2.Size = UDim2.new(0.8, 0, 0.15, 0)
+button2.Position = UDim2.new(0.1, 0, 0.35, 0)
+button2.Text = "Infinite Jump"
+button2.TextColor3 = Color3.fromRGB(255, 255, 255)
+button2.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- Red by default
+button2.BorderSizePixel = 0
+button2.TextSize = 20
+button2.Parent = frame
+
+-- Create a TextButton as the close button
+local closeButton = Instance.new("TextButton")
+closeButton.Size = UDim2.new(0.1, 0, 0.1, 0)
+closeButton.Position = UDim2.new(0.9, 0, 0, 0)
+closeButton.Text = "X"
+closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+closeButton.BorderSizePixel = 0
+closeButton.TextSize = 20
+closeButton.Parent = frame
+
+-- Function to animate the GUI in
+local function animateIn()
+    for transparency = 0, 1, 0.05 do
+        frame.BackgroundTransparency = transparency
+        wait(0.1)
+    end
+end
+
+-- Function to animate the GUI out
+local function animateOut()
+    for transparency = 1, 0, -0.05 do
+        frame.BackgroundTransparency = transparency
+        wait(0.1)
+    end
+end
+
+-- Close function to destroy the GUI
+local function closeGUI()
+    animateOut()
+    wait(0.5) -- Wait for animation to complete before destroying
+    gui:Destroy()
+end
+
+-- Connect the "Close" button to the close function
+closeButton.MouseButton1Click:Connect(closeGUI)
+
+-- Infinite Jump functionality
+local Humanoid = game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
+local InfiniteJumpEnabled = false -- Start with infinite jump off
+
+local function toggleInfiniteJump()
+    InfiniteJumpEnabled = not InfiniteJumpEnabled
+    Humanoid.JumpPower = InfiniteJumpEnabled and math.huge or 50 -- Set JumpPower to a large number when enabled, default value when disabled
+    button2.Text = InfiniteJumpEnabled and "Infinite Jump Enabled" or "Infinite Jump"
+    button2.BackgroundColor3 = InfiniteJumpEnabled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0) -- Green when enabled, red when disabled
+end
+
+-- Connect the "Infinite Jump" button to the toggle function
+button2.MouseButton1Click:Connect(toggleInfiniteJump)
+
+-- Function to execute the loadstring
+local function executeLoadstring()
+    local loadstringURL = 'https://raw.githubusercontent.com/R3TH-PRIV/R3THPRIV/main/loader.lua'
+    local loadstringFunction = loadstring(game:HttpGet(loadstringURL))
+    if loadstringFunction then
+        loadstringFunction()
+    else
+        warn("Failed to load script from URL:", loadstringURL)
+    end
+end
+
+-- Connect the "mm2 R3TH PRIV" button to the function
+button1.MouseButton1Click:Connect(executeLoadstring)
+
+-- Animate the GUI in when it appears
+animateIn()
